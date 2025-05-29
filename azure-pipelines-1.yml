@@ -1,0 +1,25 @@
+trigger:
+- master
+pool:
+ vmImage: windows-latest
+ 
+stages:
+  - stage: A
+    jobs:
+      - job: JobA
+        steps:
+          - task: Maven@4
+           
+            displayName: "Task name is A"
+            timeoutInMinutes: 20
+            inputs:
+              mavenPomFile: 'POM.fi'
+              goals: 'verify'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
+            
