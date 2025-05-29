@@ -1,0 +1,15 @@
+trigger: none
+
+pool: windows-latest
+
+stages:
+  - stage: A
+    jobs:
+      - deployment: Test
+        environment: Test
+        strategy: 
+         runOnce:
+            deploy:
+               steps:
+                 - checkout: self
+                 - script: echo "This is my first deployment job Demo"
