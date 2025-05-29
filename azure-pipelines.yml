@@ -1,16 +1,40 @@
 trigger: none
+pr: none
 
-pool:
- vmImage: windows-latest
+pool: 
+ name: Local
 
 stages:
-  - stage: A
+  - stage: Checkout-Code
     jobs:
-      - deployment: Test
-        environment: Test
-        strategy: 
-         runOnce:
-            deploy:
-               steps:
-                 - checkout: self
-                 - script: echo "This is my first deployment job Demo"
+     - job: 'gitCheckoutCode'
+       steps:
+         - checkout: self
+  
+  - stage: sonarcubeprepare
+    jobs: 
+      - job: 'SonarCubeAnalysis'
+        steps:
+          - task: SonarQubePrepare@7
+            inputs: 
+             SonarQube: 'sonarqubewithazureSCconn'
+             scannerMode: 'other'
+             projectKey: 'TestYAMLSonarQubeKey'
+             projectName: 'TestYAMLSonarQubeName'
+             
+  - stage: mavenBuild
+    jobs: 
+     - job: 'buildAndScanCode'
+       steps: 
+        - task: Maven@4
+          inputs: 
+            mavenPomFile: 'pom.xml'
+            goals: 'clean install sonar:sonar'
+            publishJUnitResults: true
+            javaHomeOption: JDKVersion
+            mavenVersionOption: Default
+            mavenAuthenticateFeed: fale
+            effectivePomSkip: false
+            sonarQubeRunAnalysis: true
+            codeCoverageToolOption: JaCoCo
+            
