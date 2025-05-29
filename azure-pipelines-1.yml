@@ -8,18 +8,7 @@ stages:
     jobs:
       - job: JobA
         steps:
-          - task: Maven@4
-           
-            displayName: "Task name is A"
-            timeoutInMinutes: 20
+          - task: AzurePowerShell@1
             inputs:
-              mavenPomFile: 'POM.fi'
-              goals: 'verify'
-              publishJUnitResults: true
-              testResultsFiles: '**/surefire-reports/TEST-*.xml'
-              javaHomeOption: 'JDKVersion'
-              mavenVersionOption: 'Default'
-              mavenAuthenticateFeed: false
-              effectivePomSkip: false
-              sonarQubeRunAnalysis: false
-            
+              ScriptType: 'InlineScript'
+              
