@@ -1,0 +1,26 @@
+pool:
+ vmImage: window-latest
+
+stages: 
+   - stage: Stage1
+     jobs:
+      - job: Job1
+
+   - stage: stageA
+     dependsOn: Stage1
+     jobs:
+       - job: JobA
+         timeoutInMinutes: 1
+         continueOnError: true
+         cancelTimeoutInMinutes: 2
+         displayName: "This ia a single job Demo"
+         condition: failed()
+         dependsOn: []
+         steps:
+           - bash: echo "A"
+
+   - stage: Stage2
+     dependsOn: []
+     jobs:
+      - job: Job2
+       
